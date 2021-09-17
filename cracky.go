@@ -61,8 +61,7 @@ func main() {
 		SetDescription("the same as the short one").
 		AddArgument("app", "the app where is located the API", "api").
 		SetAction(func(args map[string]commando.ArgValue, flags map[string]commando.FlagValue){
-			fmt.Printf("There will be the logic for directories creation...\n\n")
-
+			fmt.Printf("Building the api directory...\n\n")
 
 			if args["app"].Value == "api" {
 				fmt.Println("you must provide the django app's name")
@@ -139,6 +138,31 @@ class CatsView(viewsets.ViewSet):
 			}
 
 		})
+
+	commando.
+		Register("rmapi").
+		SetShortDescription("just remove the api that was built").
+		SetDescription("It just receives the folders and remove the apis").
+		AddArgument("app", "the app the contains the api","api").
+		SetAction(func (args map[string]commando.ArgValue, flags map[string]commando.FlagValue){
+			fmt.Printf("Deleting the api directory...\n\n")
+
+			if args["app"].Value == "api" {
+				fmt.Println("you must provide the django app's name to delete")
+			}else {
+				var end_dir string = args["app"].Value + "/api"
+				err:= os.RemoveAll(end_dir)
+				if err != nil {
+					log.Fatal(err)
+				}else {
+					fmt.Println("directory deleted", end_dir)
+				}
+			}
+
+			fmt.Printf("Process ended...\n\n")
+
+		})
+
 
 	commando.Parse(nil)
 }
